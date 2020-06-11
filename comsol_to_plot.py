@@ -26,7 +26,6 @@ def str_to_linspace(string, param, other_params, param_name = None):
         param_py = '* np.linspace(' + str(param[0]) + ',' + str(param[1]) + ',' + str(100) + ')'
         string = string + param_py
         string = string.lstrip()
-    print(string)
     return(string)
 
 
@@ -66,12 +65,6 @@ def plt_k_sweep(ks, param_name, sweep_length, other_params):
                 sweep_length.pop(0)
                 
                 
-            
-        
-        
-
-
-plt_k_sweep(comsol, 'b', [0.0, 5.0], {'L': 0.9610})
 
 
 
