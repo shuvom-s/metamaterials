@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-comsol = ['if(b<1, b*4*pi/(3*sqrt(3)), if(b<1.5, 4*pi/(3*sqrt(3))-2*pi*(sqrt(3)-2)/(3*sqrt(3))*(b-1), (1-(b-1.5)*2/sqrt(3))*pi/sqrt(3)/L',
-          'if(b<1, 0, if(b<1.5, (b-1)*2*pi/3, (1-(b-1.5)*2/sqrt(3))*pi/3/L/sqrt(3)']
+comsol = ['if(b<1, b*4*pi/(3*sqrt(3)), if(b<1.5, 4*pi/(3*sqrt(3))-2*pi*(sqrt(3)-2)/(3*sqrt(3))*(b-1), (1-(b-1.5)*2/sqrt(3))*pi/sqrt(3)/L))',
+          'if(b<1, 0, if(b<1.5, (b-1)*2*pi/3, (1-(b-1.5)*2/sqrt(3))*pi/3/L/sqrt(3)))']
 
 
 def str_to_linspace(string, param, other_params, param_name = None):
@@ -47,13 +47,14 @@ def plt_k_sweep(ks, param_name, sweep_length, other_params):
         if len(str_x) != len(str_y):
             raise ValueError('One sweep is unmatched - e.g. there is one x sweep that has no corresponding y sweep')
         
-        sweeps = []
+        ifs = 0
         for i, strs in enumerate(str_x):
             if "if" in strs:
                 ind = max(strs.find('<'), strs.find('>'), strs.find('='))
                 
                 sweep_length.append(float(strs[ind+1:])) 
                 sweep_length.sort()
+                ifs += 1
                 
             else:
                 p_x, p_y = None, None
@@ -61,10 +62,17 @@ def plt_k_sweep(ks, param_name, sweep_length, other_params):
                     p_x = param_name
                 if param_name in str_y[i]:
                     p_y = param_name
-                str_to_np(str_x[i], str_y[i], [sweep_length[0], sweep_length[1]], other_params, [p_x, p_y])
+                
+                if not i == len(str_x) - 1:
+                    str_to_np(str_x[i], str_y[i], [sweep_length[0], sweep_length[1]], other_params, [p_x, p_y])
+                
+                else:
+                    str_x[i] = str_x[i][:-ifs]
+                    str_y[i] = str_y[i][:-ifs]
+                    str_to_np(str_x[i], str_y[i], [sweep_length[0], sweep_length[1]], other_params, [p_x, p_y])
                 sweep_length.pop(0)
                 
                 
-
+plt_k_sweep(comsol, 'b', [0, 5], {'L': 0.9})
 
 
