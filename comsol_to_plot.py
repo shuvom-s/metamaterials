@@ -30,9 +30,9 @@ def str_to_linspace(string, param, other_params, param_name = None):
 
 
 def str_to_np(string_x, string_y, param, other_params, param_names=[None, None]):
-    str_x = str_to_linspace(string_x, param, other_params, param_names[0])
-    str_y = str_to_linspace(string_y, param, other_params, param_names[1])
-    plt.plot(eval(str_x), eval(str_y))
+    k_x = str_to_linspace(string_x, param, other_params, param_names[0])
+    k_y = str_to_linspace(string_y, param, other_params, param_names[1])
+    plt.plot(eval(k_x), eval(k_y))
     
 
 def plt_k_sweep(ks, param_name, sweep_length, other_params):
